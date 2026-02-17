@@ -24,6 +24,13 @@ vim.opt.signcolumn = "auto" -- Always show sign column (for LSP diagnostics)
 
 -- Terminal keybind
 vim.keymap.set('n', '<leader>t', ':vsplit | term<CR>:vertical resize 80<CR>i', { desc = 'Open terminal split' })
-
+vim.keymap.set('t', '<C-w>', '<C-\\><C-n><C-w>', { desc = 'Window switch from terminal' }) 
+-- switching to terminal view, starts in i-mode
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = "term://*",
+  command = "startinsert"
+})
 -- Set leader key (if not already set)
 vim.g.mapleader = " "  -- Spacebar as leader
+
+-- 
