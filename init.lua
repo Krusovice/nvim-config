@@ -19,7 +19,6 @@ vim.opt.expandtab = true   -- Use spaces instead of tabs
 vim.opt.smartindent = true
 
 -- Better visual feedback
-vim.opt.cursorline = true  -- Highlight current line
 vim.opt.signcolumn = "auto" -- Always show sign column (for LSP diagnostics)
 
 -- Terminal keybind
@@ -33,4 +32,26 @@ vim.api.nvim_create_autocmd("BufEnter", {
 -- Set leader key (if not already set)
 vim.g.mapleader = " "  -- Spacebar as leader
 
--- 
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git", "clone", "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", lazypath
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+-- Load plugins
+require("lazy").setup({
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+  },
+  {
+    "williamboman/mason.nvim",
+    config = function()
+      require("mason").setup()
+    end,
+  },
+})
