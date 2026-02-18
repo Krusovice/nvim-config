@@ -1,31 +1,25 @@
 vim.g.mapleader = " "
-
 -- Show line numbers
 vim.opt.number = true
 vim.opt.relativenumber = true
-
 -- global clipboard, to yank paste outside nvim
 vim.opt.clipboard = "unnamedplus"
-
 -- Disable swap files
 vim.opt.swapfile = false
-
 -- Better search
 vim.opt.ignorecase = true  -- Case insensitive search
 vim.opt.smartcase = true   -- Unless you use capitals
-
 -- Indentation for Rust/JS/TS
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true   -- Use spaces instead of tabs
 vim.opt.smartindent = true
-
 -- Better visual feedback
 vim.opt.signcolumn = "auto" -- Always show sign column (for LSP diagnostics)
 
 -- Terminal keybind
 vim.keymap.set('n', '<leader>t', ':vsplit | term<CR>:vertical resize 80<CR>i', { desc = 'Open terminal split' })
-vim.keymap.set('t', '<C-w>', '<C-\\><C-n><C-w>', { desc = 'Window switch from terminal' }) 
+vim.keymap.set('t', '<C-w>', '<C-\\><C-n><C-w>', { desc = 'Window switch from terminal' })
 
 -- switching to terminal view, starts in i-mode
 vim.api.nvim_create_autocmd("BufEnter", {
@@ -43,16 +37,72 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
+
 -- Load plugins
 require("lazy").setup({
+  -- Syntax highlighting
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
   },
+  -- LSP config
   {
-    "williamboman/mason.nvim",
+    "williamboman/mason-lspconfig.nvim",
+    dependencies = {
+      "williamboman/mason.nvim",
+      "neovim/nvim-lspconfig",
+    },
     config = function()
       require("mason").setup()
+      require("mason-lspconfig").setup({
+        ensure_installed = {
+          "html",
+          "cssls",
+          "ts_ls",
+          "astro",
+          "rust_analyzer",
+          "pyright",
+        },
+        automatic_installation = true,
+      })
+    end,
+  },
+  -- Enable language servers
+  {
+    "neovim/nvim-lspconfig",
+    config = function()
+      vim.lsp.enable({'html', 'cssls', 'ts_ls', 'astro', 'rust_analyzer', 'pyright'})
+    end,
+  },
+  -- Autocompletion
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "L3MON4D3/LuaSnip",
+      "saadparwaiz1/cmp_luasnip",
+    },
+    config = function()
+      local cmp = require("cmp")
+      local luasnip = require("luasnip")
+      cmp.setup({
+        snippet = {
+          expand = function(args)
+            luasnip.lsp_expand(args.body)
+          end,
+        },
+        mapping = cmp.mapping.preset.insert({
+          ["<Tab>"] = cmp.mapping.select_next_item(),
+          ["<S-Tab>"] = cmp.mapping.select_prev_item(),
+          ["<CR>"] = cmp.mapping.confirm({ select = true }),
+        }),
+        sources = {
+          { name = "nvim_lsp" },
+          { name = "luasnip" },
+          { name = "buffer" },
+        },
+      })
     end,
   },
 })
