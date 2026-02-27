@@ -1,5 +1,4 @@
-v
-im.g.mapleader = " "
+vim.g.mapleader = " "
 -- Show line numbers
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -28,8 +27,9 @@ vim.keymap.set("n", "<A-k>", ":m .-2<CR>==")
 
 -- improved indentation in visual mode
 vim.keymap.set("v", "<", "<gv")
-vim.keymap.set("v", ">", ">gv")-- switching to terminal view, starts in i-mode
+vim.keymap.set("v", ">", ">gv")
 
+-- switching to terminal view, starts in i-mode
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = "term://*",
   command = "startinsert"
