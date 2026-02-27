@@ -9,7 +9,7 @@ vim.opt.swapfile = false
 -- Better search
 vim.opt.ignorecase = true  -- Case insensitive search
 vim.opt.smartcase = true   -- Unless you use capitals
--- Indentation for Rust/JS/TS
+-- Indentation for /JS/TS
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true   -- Use spaces instead of tabs
@@ -21,7 +21,14 @@ vim.opt.signcolumn = "auto" -- Always show sign column (for LSP diagnostics)
 vim.keymap.set('n', '<leader>t', ':vsplit | term<CR>:vertical resize 80<CR>i', { desc = 'Open terminal split' })
 vim.keymap.set('t', '<C-w>', '<C-\\><C-n><C-w>', { desc = 'Window switch from terminal' })
 
--- switching to terminal view, starts in i-mode
+-- Move lines up/down
+vim.keymap.set("n", "<A-j>", ":m .+1<CR>==")
+vim.keymap.set("n", "<A-k>", ":m .-2<CR>==")
+
+-- improved indentation in visual mode
+vim.keymap.set("v", "<", "<gv")
+vim.keymap.set("v", ">", ">gv")-- switching to terminal view, starts in i-mode
+
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = "term://*",
   command = "startinsert"
@@ -53,6 +60,14 @@ require("lazy").setup({
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        ensure_installed = { "rust", "javascript", "typescript", "html", "css", "python", "astro" },
+        highlight = {
+          enable = true,
+        },
+      })
+    end,
   },
   -- LSP config
   {
@@ -69,7 +84,7 @@ require("lazy").setup({
           "cssls",
           "ts_ls",
           "astro",
-          "rust_analyzer",
+          "_analyzer",
           "pyright",
         },
         automatic_installation = true,
@@ -80,7 +95,7 @@ require("lazy").setup({
   {
     "neovim/nvim-lspconfig",
     config = function()
-      vim.lsp.enable({'html', 'cssls', 'ts_ls', 'astro', 'rust_analyzer', 'pyright'})
+      vim.lsp.enable({'html', 'cssls', 'ts_ls', 'astro', '_analyzer', 'pyright'})
     end,
   },
   -- Autocompletion
