@@ -1,4 +1,5 @@
-vim.g.mapleader = " "
+v
+im.g.mapleader = " "
 -- Show line numbers
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -84,7 +85,7 @@ require("lazy").setup({
           "cssls",
           "ts_ls",
           "astro",
-          "_analyzer",
+          "rust_analyzer",
           "pyright",
         },
         automatic_installation = true,
@@ -95,7 +96,7 @@ require("lazy").setup({
   {
     "neovim/nvim-lspconfig",
     config = function()
-      vim.lsp.enable({'html', 'cssls', 'ts_ls', 'astro', '_analyzer', 'pyright'})
+      vim.lsp.enable({'html', 'cssls', 'ts_ls', 'astro', 'rust_analyzer', 'pyright'})
     end,
   },
   -- Autocompletion
