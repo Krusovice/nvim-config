@@ -58,18 +58,16 @@ vim.api.nvim_create_autocmd("FileType", {
 -- Load plugins
 require("lazy").setup({
   -- Syntax highlighting
-  {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = { "rust", "javascript", "typescript", "html", "css", "python", "astro" },
-        highlight = {
-          enable = true,
-        },
-      })
-    end,
+{
+  "nvim-treesitter/nvim-treesitter",
+  build = ":TSUpdate",
+  opts = {
+    ensure_installed = { "rust", "javascript", "typescript", "html", "css", "python", "astro" },
+    highlight = {
+      enable = true,
+    },
   },
+},
   -- LSP config
   {
     "williamboman/mason-lspconfig.nvim",
