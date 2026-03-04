@@ -35,6 +35,15 @@ vim.api.nvim_create_autocmd("BufEnter", {
   command = "startinsert"
 })
 
+-- filetype detection for buffere åbnet via netrw
+vim.api.nvim_create_autocmd({"BufRead", "BufEnter"}, {
+  callback = function()
+    if vim.bo.filetype == "" then
+      vim.cmd("filetype detect")
+    end
+  end,
+})
+
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
