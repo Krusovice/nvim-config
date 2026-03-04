@@ -16,6 +16,10 @@ vim.opt.expandtab = true
 vim.opt.smartindent = true
 vim.opt.signcolumn = "auto"
 
+-- Deactivating folds
+vim.opt.foldenable = false
+vim.opt.foldmethod = "manual"
+
 -- Terminal keybind
 vim.keymap.set('n', '<leader>t', ':vsplit | term<CR>:vertical resize 80<CR>i')
 vim.keymap.set('t', '<C-w>', '<C-\\><C-n><C-w>')
@@ -93,7 +97,7 @@ require("lazy").setup({
     config = function()
       require("mason").setup()
       require("mason-lspconfig").setup({
-        ensure_installed = { "html", "cssls", "ts_ls", "astro", "rust_analyzer", "pyright" },
+        ensure_installed = { "html", "cssls", "ts_ls", "astro", "pyright" },
         automatic_installation = true,
       })
     end,
@@ -103,7 +107,7 @@ require("lazy").setup({
   {
     "neovim/nvim-lspconfig",
     config = function()
-      vim.lsp.enable({ "html", "cssls", "ts_ls", "astro", "rust_analyzer", "pyright" })
+      vim.lsp.enable({ "html", "cssls", "ts_ls", "astro", "pyright" })
     end,
   },
 
