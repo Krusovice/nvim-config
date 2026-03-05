@@ -59,7 +59,17 @@ vim.opt.rtp:prepend(lazypath)
 -- Plugins
 require("lazy").setup({
 
-  -- Treesitter
+-- colorscheme
+{
+  "rebelot/kanagawa.nvim",
+  priority = 1000,
+  config = function()
+    vim.opt.termguicolors = true
+    vim.cmd.colorscheme("kanagawa")
+  end,
+},
+
+-- Treesitter
 {
   "nvim-treesitter/nvim-treesitter",
   lazy = false,
@@ -77,6 +87,14 @@ require("lazy").setup({
       "css",
       "python",
       "astro",
+    })
+
+    -- Enable TS highlighting for selected filetypes
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = { "rust", "javascript", "typescript", "html", "css", "python", "astro" },
+      callback = function(args)
+        vim.treesitter.start(args.buf)
+      end,
     })
   end,
 },
