@@ -1,8 +1,6 @@
 -- init.lua
-
 vim.cmd("filetype plugin indent on")
 vim.g.mapleader = " "
-
 -- Line numbers
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -15,27 +13,22 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.smartindent = true
 vim.opt.signcolumn = "auto"
-
 -- Deactivating folds
 vim.opt.foldenable = false
 vim.opt.foldmethod = "manual"
-
 -- Terminal keybind
 vim.keymap.set('n', '<leader>t', ':vsplit | term<CR>:vertical resize 80<CR>i')
 vim.keymap.set('t', '<C-w>', '<C-\\><C-n><C-w>')
-
 -- Move lines
 vim.keymap.set("n", "<A-j>", ":m .+1<CR>==")
 vim.keymap.set("n", "<A-k>", ":m .-2<CR>==")
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
-
 -- Terminal starts in insert
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = "term://*",
   command = "startinsert"
 })
-
 -- Web files 2 spaces
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "astro", "html", "css", "javascript", "typescript", "typescriptreact" },
@@ -44,7 +37,6 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.shiftwidth = 2
   end
 })
-
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -54,11 +46,10 @@ if not vim.loop.fs_stat(lazypath) then
     "--branch=stable", lazypath
   })
 end
+vim.opt.rtp:prepend(vim.fn.stdpath("data") .. "/site")
 vim.opt.rtp:prepend(lazypath)
-
 -- Plugins
 require("lazy").setup({
-
 -- colorscheme
 {
   "rebelot/kanagawa.nvim",
@@ -68,7 +59,6 @@ require("lazy").setup({
     vim.cmd.colorscheme("kanagawa")
   end,
 },
-
 -- Treesitter
 {
   "nvim-treesitter/nvim-treesitter",
@@ -78,7 +68,6 @@ require("lazy").setup({
     require("nvim-treesitter").setup({
       install_dir = vim.fn.stdpath("data") .. "/site",
     })
-
     require("nvim-treesitter").install({
       "rust",
       "javascript",
@@ -88,7 +77,6 @@ require("lazy").setup({
       "python",
       "astro",
     })
-
     -- Enable TS highlighting for selected filetypes
     vim.api.nvim_create_autocmd("FileType", {
       pattern = { "rust", "javascript", "typescript", "html", "css", "python", "astro" },
@@ -98,7 +86,6 @@ require("lazy").setup({
     })
   end,
 },
-
   -- Autotag (afhængig af Treesitter)
   {
     "windwp/nvim-ts-autotag",
@@ -107,7 +94,6 @@ require("lazy").setup({
       require("nvim-ts-autotag").setup()
     end,
   },
-
   -- Mason + LSP
   {
     "williamboman/mason-lspconfig.nvim",
@@ -120,7 +106,6 @@ require("lazy").setup({
       })
     end,
   },
-
   -- Enable LSP
   {
     "neovim/nvim-lspconfig",
@@ -128,7 +113,6 @@ require("lazy").setup({
       vim.lsp.enable({ "html", "cssls", "ts_ls", "astro", "pyright" })
     end,
   },
-
   -- Autocompletion
   {
     "hrsh7th/nvim-cmp",
@@ -147,5 +131,15 @@ require("lazy").setup({
       })
     end,
   },
-
+  -- Multi-cursor
+  {
+    "mg979/vim-visual-multi",
+    branch = "master",
+    init = function()
+      vim.g.VM_maps = {
+        ["Add Cursor Up"]   = "<A-Up>",
+        ["Add Cursor Down"] = "<A-Down>",
+      }
+    end,
+  },
 })
