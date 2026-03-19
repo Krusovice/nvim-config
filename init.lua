@@ -48,6 +48,16 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(vim.fn.stdpath("data") .. "/site")
 vim.opt.rtp:prepend(lazypath)
+
+-- Sluk semantic tokens globalt (skal stå FØR lazy setup)
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client then
+      client.server_capabilities.semanticTokensProvider = nil
+    end
+  end,
+})
 -- Plugins
 require("lazy").setup({
 -- colorscheme
@@ -106,13 +116,13 @@ require("lazy").setup({
       })
     end,
   },
-  -- Enable LSP
-  {
-    "neovim/nvim-lspconfig",
-    config = function()
-      vim.lsp.enable({ "html", "cssls", "ts_ls", "astro", "pyright" })
-    end,
-  },
+    -- Enable LSP
+    {
+      "neovim/nvim-lspconfig",
+      config = function()
+        vim.lsp.enable({ "html", "cssls", "ts_ls", "astro", "pyright" })
+      end,
+    },
   -- Autocompletion
   {
     "hrsh7th/nvim-cmp",
